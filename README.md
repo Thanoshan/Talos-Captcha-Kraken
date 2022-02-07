@@ -1,1 +1,2 @@
-# APS360-Project
+# Talos Captcha Killer
+The Ultimate Captcha Solver - Using a generative adversial network
