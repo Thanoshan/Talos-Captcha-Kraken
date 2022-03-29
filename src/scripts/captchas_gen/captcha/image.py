@@ -121,6 +121,7 @@ class _Captcha(object):
         """
         if seed is not None:
             random.seed(seed)
+            print("Dirty Seed:", seed)
 
         im = self.generate_image(chars)
         return im.save(output, format=format)
@@ -133,9 +134,10 @@ class _Captcha(object):
         """
         if seed is not None:
             random.seed(seed)
+            print("Clean Seed:", seed)
 
-        im = self.generate_clean_image(chars)
-        return im.save(output, format=format)
+        im_clean = self.generate_clean_image(chars)
+        return im_clean.save(output, format=format)
 
 
 class WheezyCaptcha(_Captcha):
@@ -380,8 +382,13 @@ class ImageCaptcha(_Captcha):
 
         :param chars: text to be generated.
         """
-        background = (255, 255, 255)
-        color = (0, 0, 0, 255)
+        background = (0, 0, 0)
+        color = (255, 255, 255, 255)
+
+        # ignore this part -- hacky solution to ensure clean/dirty is synced
+        hacky_background = random_color(238, 255)
+        hacky_color = random_color(10, 200, random.randint(220, 255))
+        
         im = self.create_captcha_image(chars, color, background)
         im = im.filter(ImageFilter.SMOOTH)
         return im
