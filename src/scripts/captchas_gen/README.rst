@@ -1,23 +1,11 @@
-To Run My Script:  
+To Run My Script (Captcha Pairs):  
 ========  
 
-``python gen_char_images.py 1000``  
+``python gen_char_images.py 100 --width=20 --height=75 --dst="trial"
 
-``python gen_char_images.py 100 --width=20 --height=75 --dst="trial"``  
+The script will generate random CAPTCHAs from 5-8 characters randomly. For each CAPTCHA generated, it will also generate a "clean" version of the CAPTCHA that can be aligned in order to train a denoising GAN.
 
-The script will generate images in the following folder structure::  
-
-   chars/  
-   ├─ 0/  
-   │  ├─ 0-1.png  
-   ├─ 1/  
-   │  ├─ 1-1.png  
-   │  ├─ 1-2.png  
-   ├─ .../  
-   ├─ a/  
-   │  ├─ a-1.png  
-   │  ├─ a-2.png  
-   ├─ .../  
+This script is a modified version of a forked CAPTCHA script, original instructions from the base author below:
 
 =======
 
