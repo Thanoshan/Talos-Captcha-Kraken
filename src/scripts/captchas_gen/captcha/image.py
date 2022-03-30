@@ -121,7 +121,6 @@ class _Captcha(object):
         """
         if seed is not None:
             random.seed(seed)
-            print("Dirty Seed:", seed)
 
         im = self.generate_image(chars)
         return im.save(output, format=format)
@@ -134,7 +133,6 @@ class _Captcha(object):
         """
         if seed is not None:
             random.seed(seed)
-            print("Clean Seed:", seed)
 
         im_clean = self.generate_clean_image(chars)
         return im_clean.save(output, format=format)

@@ -48,15 +48,11 @@ def run():
 
     for i in tqdm(range(args.n)):
         global imageCaptcha
-        somestring = get_random_string(8)
+        somestring = get_random_string(random.randint(4, 9))
         seed = time.time()
-        imageCaptcha.write_clean(somestring, args.dst + "/clean/" + somestring + ".png", "png", seed)
-        imageCaptcha.write(somestring, args.dst + "/dirty/" + somestring + ".png", "png", seed)
+        imageCaptcha.write_clean(somestring, args.dst + "/B/test/" + somestring + ".png", "png", seed)
+        imageCaptcha.write(somestring, args.dst + "/A/test/" + somestring + ".png", "png", seed)
 
-        if (i % 20):
-            scale = random.uniform(1, 5)
-            hscale = random.uniform(1, 1.2)
-            imageCaptcha = ImageCaptcha(int(160 * scale), int(60 * scale * hscale), font_sizes=(int(42*scale), int(50*scale), int(56*scale)))
         """
         imageCaptcha.generate_char_image(
             args.chars,
