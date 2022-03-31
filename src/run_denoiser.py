@@ -50,11 +50,11 @@ def execute_pix2pix_denoise(model, img):
            #     save_image(result_new, "test.png")
         return result_new    
 
-test_path = "/Users/thanos/Documents/APS360_FinalProj_SRC/Talos-Captcha-Kraken/results/models/GAN_Denoising/images/ F7j62_real_A.png"
-test_image = Image.open(test_path).convert('RGB')
-test_image = np.asarray(test_image)
-net = load_pix2pix_CAPTCHA(gpu_ids=[])
-result = execute_pix2pix_denoise(net, test_image)
+# test_path = "/Users/thanos/Documents/APS360_FinalProj_SRC/Talos-Captcha-Kraken/results/models/GAN_Denoising/images/ F7j62_real_A.png"
+# test_image = Image.open(test_path).convert('RGB')
+# test_image = np.asarray(test_image)
+# net = load_pix2pix_CAPTCHA(gpu_ids=[])
+# result = execute_pix2pix_denoise(net, test_image)
 
 
 
