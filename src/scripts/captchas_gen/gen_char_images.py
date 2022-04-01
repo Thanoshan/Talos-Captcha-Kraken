@@ -47,20 +47,37 @@ def run():
     args = parser.parse_args()
 
     for i in tqdm(range(args.n)):
+        os.makedirs(args.dst, exist_ok=True)
         global imageCaptcha
         somestring = get_random_string(random.randint(4, 9))
         seed = time.time()
-        imageCaptcha.write_clean(somestring, args.dst + "/B/test/" + somestring + ".png", "png", seed)
-        imageCaptcha.write(somestring, args.dst + "/A/test/" + somestring + ".png", "png", seed)
 
-        """
-        imageCaptcha.generate_char_image(
-            args.chars,
-            dst=args.dst,
-            wid=args.width,
-            height=args.height,
-            dry_run=args.dry_run,
-        )"""
+        """Just captchas of dimension 320x144"""
+        scale=2
+        hscale=1.2
+        imageCaptcha = ImageCaptcha(int(160 * scale), int(60 * scale * hscale), font_sizes=(int(42*scale), int(50*scale), int(56*scale)))
+        imageCaptcha.write(somestring, args.dst + "/" + somestring + ".png")
+
+        """Pairs of noisy and denoised images"""
+        # os.makedirs(args.dst+"/clean", exist_ok=True)
+        # os.makedirs(args.dst+"/noisy", exist_ok=True)
+        # # imageCaptcha.write_clean(somestring, args.dst + "/clean/" + somestring + ".png", "png", seed)
+        # imageCaptcha.write(somestring, args.dst + "/noisy/" + somestring + ".png", "png", seed)
+
+        """Random resize of captchas"""
+        # if (i % 20):
+            # scale = random.uniform(1, 5)
+            # hscale = random.uniform(1, 1.2)
+            # imageCaptcha = ImageCaptcha(int(160 * scale), int(60 * scale * hscale), font_sizes=(int(42*scale), int(50*scale), int(56*scale)))
+
+        """Generate character images"""
+        # imageCaptcha.generate_char_image(
+        #     args.chars,
+        #     dst=args.dst,
+        #     wid=args.width,
+        #     height=args.height,
+        #     dry_run=args.dry_run,
+        # )
 
 
 def captcha_samples():
