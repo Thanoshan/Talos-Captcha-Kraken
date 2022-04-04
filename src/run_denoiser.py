@@ -13,7 +13,7 @@ import numpy as np
 from models.pix2pix.util import save_image, tensor2im
 
 # Change gpu_id to -1 for CPU
-def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/latest_net_G.pth", gpu_ids = [0], eval=False):
+def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/v3_net_G.pth", gpu_ids = [0], eval=False):
         model = define_G(
                 input_nc=3,
                 output_nc=3,
@@ -26,11 +26,9 @@ def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/latest_net_G.pt
                 gpu_ids=gpu_ids,
         )
 
-        device = torch.device("cuda:{}".format(gpu_ids)) if gpu_ids else torch.device("cpu")
+        device = torch.device("cuda:{}".format(gpu_ids[0])) if gpu_ids else torch.device("cpu")
 
         state_dict = torch.load(model_path, map_location=str(device))
-        if hasattr(state_dict, "_metadata"):
-                del state_dict._metadata
 
         model.load_state_dict(state_dict)
         
@@ -39,14 +37,16 @@ def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/latest_net_G.pt
         return model
 
 def execute_pix2pix_denoise(model, img):
-        transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),])
-        img_n = Image.fromarray(img).convert("RGB")
-        if torch.cuda.is_available():
-                img_n = img.cuda()
+        transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),])
 
         with torch.no_grad():
-                result = (model(transform(img_n).unsqueeze(0)))
+                if torch.cuda.is_available():
+                        result = (model(transform(img).cuda().unsqueeze(0)))
+                else:
+                        result = (model(transform(img).unsqueeze(0)))
+
                 result_new = tensor2im(result)
+                result_new = Image.fromarray(result_new).convert('RGB')
            #     save_image(result_new, "test.png")
         return result_new    
 
