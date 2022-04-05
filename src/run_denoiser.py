@@ -29,6 +29,9 @@ def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/v3_net_G.pth", 
         device = torch.device("cuda:{}".format(gpu_ids[0])) if gpu_ids else torch.device("cpu")
 
         state_dict = torch.load(model_path, map_location=str(device))
+       
+        if hasattr(state_dict, "_metadata"):
+                del state_dict._metadata
 
         model.load_state_dict(state_dict)
         
@@ -37,7 +40,7 @@ def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/v3_net_G.pth", 
         return model
 
 def execute_pix2pix_denoise(model, img):
-        transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),])
+        transform = transforms.Compose([transforms.Resize((256, 256)), transforms.Lambda(lambda img: __make_power_2(img, base=4, method=Image.BICUBIC)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
         with torch.no_grad():
                 if torch.cuda.is_available():
@@ -50,6 +53,13 @@ def execute_pix2pix_denoise(model, img):
            #     save_image(result_new, "test.png")
         return result_new    
 
+def __make_power_2(img, base, method=Image.BICUBIC):
+    ow, oh = img.size
+    h = int(round(oh / base) * base)
+    w = int(round(ow / base) * base)
+    if h == oh and w == ow:
+        return img
+    return img.resize((w, h), method)
 # test_path = "/Users/thanos/Documents/APS360_FinalProj_SRC/Talos-Captcha-Kraken/results/models/GAN_Denoising/images/ F7j62_real_A.png"
 # test_image = Image.open(test_path).convert('RGB')
 # test_image = np.asarray(test_image)
