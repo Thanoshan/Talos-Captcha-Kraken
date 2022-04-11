@@ -39,11 +39,11 @@ def load_pix2pix_CAPTCHA(model_path="./checkpoints/GAN_Denoising/v3_net_G.pth", 
                 model.eval()
         return model
 
-def execute_pix2pix_denoise(model, img):
+def execute_pix2pix_denoise(model, img, do_cuda=True):
         transform = transforms.Compose([transforms.Resize((256, 256)), transforms.Lambda(lambda img: __make_power_2(img, base=4, method=Image.BICUBIC)), transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
         with torch.no_grad():
-                if torch.cuda.is_available():
+                if torch.cuda.is_available() and do_cuda:
                         result = (model(transform(img).cuda().unsqueeze(0)))
                 else:
                         result = (model(transform(img).unsqueeze(0)))
